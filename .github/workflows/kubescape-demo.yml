@@ -16,10 +16,13 @@ jobs:
       - name: Install Kubescape
         run: |
           curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh | bash
-          echo "$HOME/.kubescape" >> $GITHUB_PATH  # Add to PATH
+          echo "$HOME/.kubescape" >> $GITHUB_PATH
+          source $GITHUB_PATH
 
       - name: Verify Kubescape Installation
-        run: which kubescape || echo "Kubescape not installed"
+        run: |
+          which kubescape || echo "Kubescape not found"
+          ls -lah $HOME/.kubescape || echo "Kubescape directory not found"
 
       - name: Scan YAML files
-        run: kubescape scan framework nsa *.yaml
+        run: $HOME/.kubescape scan framework nsa *.yaml
